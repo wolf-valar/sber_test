@@ -6,7 +6,7 @@ if [ -z "$1" ]; then  R_USER='user';
 fi
 
 
-if [ -z "$2" ]; then  R_HOST='10.77.77.16';
+if [ -z "$2" ]; then  R_HOST='test.jire.ru';
   else R_HOST=$2;
 fi
 
