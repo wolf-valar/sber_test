@@ -7,7 +7,7 @@
       dest: /var/opt/docker_env 
       mode: preserve
   - name: Init Docker containers
-    shell: /var/opt/docker_env/docker/docker_init && reboot
+    shell: /var/opt/docker_env/docker/docker_init 
     args:
       chdir: /var/opt/docker_env/docker
       executable: /bin/bash

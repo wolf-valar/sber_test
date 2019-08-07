@@ -21,7 +21,7 @@ fi
 echo $R_USER@$R_HOST
 
 
-PG_PWD=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-22} )
+PG_PWD=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-10} )
 
 
 ./clean
