@@ -1,0 +1,5 @@
+CREATE USER django with PASSWORD 'PG_PWD';
+ALTER ROLE django SET client_encoding TO 'UTF8';
+ALTER ROLE django SET default_transaction_isolation TO 'read committed';
+ALTER ROLE django SET timezone TO 'UTC';
+CREATE DATABASE django_db OWNER django;

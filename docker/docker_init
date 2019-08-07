@@ -1,0 +1,19 @@
+docker ps | grep "snginx\|dj\|pgsql" | awk '{print $1}' | xargs docker stop > /dev/null
+rm -rf ./postgres/pgdata > /dev/null
+systemctl enable docker
+sleep 1
+./create_net
+cd nginx && docker build -t snginx:v1 ./
+cd ../postgres && docker build -t pgsql:v1 ./ #&& ./postgres/initdb 
+docker run -v /var/opt/docker_env/docker/postgres/pgdata:/var/lib/postgresql/data --network='sbr1' --network-alias='pgsql' -d pgsql:v1
+sleep 10
+PG_ID=$(docker ps | grep "pgsql" | awk '{print $1}')
+#echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+#echo $PG_ID
+#echo "-----------------------------------------------------------"
+docker exec $PG_ID sudo -u postgres psql -f db_init
+#echo "-----------------Docker exec finished----------------------"
+docker stop $PG_ID
+cd ../py_django && docker build -t dj:v1 ./
+cd ../ && ./docker_start
+

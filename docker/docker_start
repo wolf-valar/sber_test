@@ -1,0 +1,6 @@
+docker run --restart always -v $PWD/postgres/pgdata:/var/lib/postgresql/data --network='sbr1' --network-alias='pgsql' -d pgsql:v1
+sleep 30
+docker run --restart always --network='sbr1' --network-alias='django' -d dj:v1
+
+docker run --restart always -p 8080:8080 --network='sbr1' --network-alias='nginx' -d snginx:v1
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#DEBUG
+rm -f ./ansible/*.retry
+rm -rf ./keys/*
+rm -f ./ansible/hosts.list
+rm -f ./docker/py_django/hw/hw/settings.py
+rm -f ./docker/postgres/db_init
+rm -rf ./docker/postgres/pgdata

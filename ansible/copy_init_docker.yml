@@ -1,0 +1,13 @@
+---
+- hosts: dst 
+  tasks:
+  - name: Copy Docker dir
+    copy:
+      src: ../docker
+      dest: /var/opt/docker_env 
+      mode: preserve
+  - name: Init Docker containers
+    shell: /var/opt/docker_env/docker/docker_init && reboot
+    args:
+      chdir: /var/opt/docker_env/docker
+      executable: /bin/bash

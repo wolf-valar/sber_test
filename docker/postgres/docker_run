@@ -1,0 +1,2 @@
+docker run -v $PWD/pgdata:/var/lib/postgresql/data --network='sbr1' --network-alias='pgsql' -t pgsql:v1
+

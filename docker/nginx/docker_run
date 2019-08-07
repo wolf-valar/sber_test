@@ -1,0 +1,2 @@
+docker run --network='sbr1' --network-alias='nginx' -t snginx:v1
+

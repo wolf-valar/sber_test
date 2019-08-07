@@ -1,0 +1,1 @@
+docker ps | grep "snginx\|dj\|pgsql" | awk '{print $1}' | xargs docker stop

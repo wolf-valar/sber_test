@@ -1,0 +1,53 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then  R_USER='user';
+  else 
+	  R_USER=$1
+fi
+
+
+if [ -z "$2" ]; then  R_HOST='10.77.77.16';
+  else R_HOST=$2;
+fi
+
+if [ -z "$3" ]; then  
+	echo 'Enter password for remote machine:';
+	read -r -s R_PWD;
+  else R_PWD=$3;
+fi
+
+
+
+echo $R_USER@$R_HOST
+
+
+PG_PWD=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-22} )
+
+
+./clean
+
+echo 'Password django user in Postgres db:'
+echo $PG_PWD
+
+if [ ! -f /usr/bin/sshpass ]; then 
+	sudo apt install sshpass -y -q
+fi
+
+#DEBUG 
+ssh-keygen -f ./keys/id_rsa -q -N ""
+#DEBUG 
+echo $R_PWD | sshpass ssh-copy-id -i ./keys/id_rsa.pub $R_USER@$R_HOST
+
+cp ./ansible/hosts.templ ./ansible/hosts.list
+cp ./docker/postgres/db_init.teml ./docker/postgres/db_init
+cp ./docker/py_django/hw/hw/settings.py.templ ./docker/py_django/hw/hw/settings.py
+
+sed -i "s/R_HOST/$R_HOST/g" ./ansible/hosts.list
+sed -i "s/R_USER/$R_USER/g" ./ansible/hosts.list
+sed -i "s/PG_PWD/$PG_PWD/g" ./docker/postgres/db_init
+sed -i "s/PG_PWD/$PG_PWD/g" ./docker/py_django/hw/hw/settings.py
+
+cd ./ansible
+ansible-playbook ubnt_update.yml --extra-vars "ansible_sudo_pass=$R_PWD"
+ansible-playbook install_docker.yml --extra-vars "ansible_sudo_pass=$R_PWD"
+ansible-playbook -b copy_init_docker.yml --extra-vars "ansible_sudo_pass=$R_PWD"
